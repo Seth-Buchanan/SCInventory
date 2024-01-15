@@ -43,12 +43,11 @@ func add_track() {
 	var name string
 	var quantity int
 	var bin_id int
-
-
 	CallClear()
-	for { 
-		fmt.Print("What bin are you adding to?\nBin: ")
-		bin_id, err := number_prompt()
+	for {
+		var err error
+		fmt.Print("What bin are you adding to?   (q to quit)\nBin: ")
+		bin_id, err = number_prompt()
 		if bin_id == -1 {	// exit inputed
 			return
 		}
@@ -69,7 +68,7 @@ func add_track() {
 
 	}
 	for {
-		fmt.Printf("Current quantity of %s: %d.\nHow much would you like to add?\n#: ", name, quantity)
+		fmt.Printf("Current quantity of %s: %d\nHow much would you like to add?   (q to quit)\n#: ", name, quantity)
 		inputNumber, err := number_prompt()
 		if inputNumber == -1 { // exit inputed
 			return
@@ -79,8 +78,8 @@ func add_track() {
 			fmt.Println(err)
 		} else {
 			CallClear()
-			if yes_no_prompt(fmt.Sprintf("Add %d items to bin %d?", inputNumber, bin_id)) {
-				// Add inputNumber to Ammotype in sql database
+			if yes_no_prompt(fmt.Sprintf("Add %d items to bin %d? (New total %d)", inputNumber, bin_id, quantity-inputNumber)) {
+				add_quantity(bin_id, inputNumber)
 			} 
 			return
 		}
@@ -88,18 +87,53 @@ func add_track() {
  }
 
 func remove_track() {
-	var input int
-	var AmmoType string = "420mm"
-	var Quantity int = 69
+	var name string
+	var quantity int
+	var bin_id int
+	CallClear()
+	for {
+		var err error
+		fmt.Print("What bin are you taking from?   (q to quit)\nBin: ")
+		bin_id, err = number_prompt()
+		if bin_id == -1 {	// exit inputed
+			return
+		}
+		if err != nil {
+			CallClear()
+			fmt.Println(err)
+		} else {
+			quantity, name = ammo_quantity(bin_id)
+			if quantity == -1  { // bin not found
+				CallClear()
+				fmt.Printf("A bin with the id %d was not found\n", bin_id)
+			} else { // all is good
+				CallClear()
+				break
+			}
+			
+		}
 
-	CallClear()
-	fmt.Print("What bin are you removing from?\nBin #: ")
-	fmt.Scan(&input)
-	CallClear()
-	fmt.Printf("Current quantity of %v: %v.\nHow much would you like to remove?\n", AmmoType, Quantity)
-	fmt.Scan(&input)
-	start_menu()
-}
+	}
+	for {
+		fmt.Printf("Current quantity of %s: %d\nHow much would you like to remove?   (q to quit)\n#: ", name, quantity)
+		inputNumber, err := number_prompt()
+		if inputNumber == -1 { // exit inputed
+			return
+		}
+		if err != nil {
+			CallClear()
+			fmt.Println(err)
+		} else {
+			CallClear()
+			if yes_no_prompt(fmt.Sprintf("Remove %d items to bin %d? (New total %d)", inputNumber, bin_id, quantity-inputNumber)) {
+				subtract_quantity(bin_id, inputNumber)
+				// Check if quantity is less than limit
+			} 
+			return
+		}
+	}
+ }
+
 
 func admin_track() {
 	fmt.Println("Admining")

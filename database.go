@@ -32,3 +32,37 @@ func ammo_quantity(identifier int) (int, string) {
 
 	return -1, ""
 }
+
+
+func add_quantity(identifier int, amount int) {
+	databaseName := "./database.db"
+	database, err := sql.Open("sqlite3", databaseName)
+	
+	if err != nil {
+		log.Fatalf("ERROR could not access %s database: %v", databaseName, err)
+	}
+
+	statement, err := database.Prepare("UPDATE ammunition SET quantity = quantity + ? where identifier = ?", )
+	defer statement.Close()
+	if err != nil {
+		log.Fatal("Unable to prepare statement ", err)
+	}
+	statement.Exec(amount, identifier)
+}
+
+
+func subtract_quantity(identifier int, amount int) {
+	databaseName := "./database.db"
+	database, err := sql.Open("sqlite3", databaseName)
+	
+	if err != nil {
+		log.Fatalf("ERROR could not access %s database: %v", databaseName, err)
+	}
+
+	statement, err := database.Prepare("UPDATE ammunition SET quantity = quantity - ? where identifier = ?", )
+	defer statement.Close()
+	if err != nil {
+		log.Fatal("Unable to prepare statement ", err)
+	}
+	statement.Exec(amount, identifier)
+}
