@@ -15,7 +15,7 @@ func main() {
 func start_menu() {
 	CallClear()
 	prompt := promptui.Select{
-		Label: "Select[Yes/No]",
+		Label: "Choose your option!",
 		Items: []string{"Add Item", "Remove Item", "Edit Params", "Quit"},
 	}
 	_, result, err := prompt.Run()
@@ -23,6 +23,7 @@ func start_menu() {
 	if err != nil {
 		log.Fatalf("Prompt failed %v\n", err)
 	}
+
 	CallClear()
 	switch result {
 	case "Add Item":
@@ -37,41 +38,44 @@ func start_menu() {
 }
 
 func add_track() {
-	var AmmoType string = "420mm"
+	var bin string = "B132"
 	var Quantity int = 69
-	var outerLoop bool = true
+
 
 	CallClear()
-	for outerLoop { 
+	for { 
 		fmt.Print("What bin are you adding to?\nBin: ")
 		bin := string_prompt()
 		if bin == "exit" {
-			outerLoop = false
 			break
 		}
-		// get_bin_id
-		CallClear()
-		
-		fmt.Printf("Current quantity of %s: %d.\nHow much would you like to add?\n#: ",  AmmoType, Quantity)
 
+		// if bin (in database) {
+		//     Quanitity = bin quanitity
+		//     
+		// }
+		CallClear()
+	}
+	var AmmoType string = "420mm"
+	// AmmoType = bin -> ammotype in sql table
+	for {
+		fmt.Printf("Current quantity of %s: %d.\nHow much would you like to add?\n#: ", AmmoType, Quantity)
 		inputNumber, err := number_prompt()
-		for {
-			if inputNumber == -1 { // exit inputed
-				outerLoop = false
-				break
+		if inputNumber == -1 { // exit inputed
+			break
+		}
+		if err != nil {
+			CallClear()
+			fmt.Println(err)
+		} else {
+			CallClear()
+			if yes_no_prompt(fmt.Sprintf("Add %d items to %s", inputNumber, bin)) {
+				// Add inputNumber to Ammotype in sql database
 			}
-			if err != nil {
-				CallClear()
-				fmt.Println(err)
-			} else {
-				CallClear()
-				fmt.Printf("Value entered %d\n", inputNumber)
-				yes_no_prompt(fmt.Sprintf("Add %d items to %s", inputNumber, AmmoType))
-				outerLoop = false
-				break
-			}
+			break
 		}
 	}
+
 	start_menu()
  }
 

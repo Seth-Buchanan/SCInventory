@@ -11,7 +11,7 @@ import (
 
 func yes_no_prompt(label string) bool {
     prompt := promptui.Select{
-        Label: "string",
+        Label: label,
         Items: []string{"Yes", "No"},
     }
     _, result, err := prompt.Run()
