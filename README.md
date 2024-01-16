@@ -1,7 +1,7 @@
 # leinvetrorie
 Nice little inventory system for all your inventory needs.
 
-<https://github.com/Seth-Buchanan/leinvetrorie/blob/2145383ffb1b569fc1424eb5d06c0bf5e3f664be/start.png>
+![Start page image](https://github.com/Seth-Buchanan/leinvetrorie/blob/2145383ffb1b569fc1424eb5d06c0bf5e3f664be/start.png?raw=true)
 
 ## Add and remove item quantities 
 Wow! a cool new sleek minimal useful terminal user interface that that adds *and* removes items!
