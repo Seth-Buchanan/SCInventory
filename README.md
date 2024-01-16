@@ -1,11 +1,13 @@
 # leinvetrorie
 Nice little inventory system for all your inventory needs.
 
+<https://github.com/Seth-Buchanan/leinvetrorie/blob/2145383ffb1b569fc1424eb5d06c0bf5e3f664be/start.png>
+
 ## Add and remove item quantities 
 Wow! a cool new sleek minimal useful terminal user interface that that adds *and* removes items!
 
 ## None of that administration bloatware!
-Our users know how to use sqlite to add and remove items from the table. I'll be adding a way for the program to detect if a database is not present and make a table.
+Our users know how to use sqlite3 to add and remove items from the table. I'll be adding a way for the program to detect if a database is not present and make a table.
 
 # Build steps
 
@@ -19,7 +21,7 @@ $ go build .
 
 # Usage
 ``` bash 
-./leinvetrorie
+./main
 ```
 
 * Select add or remove action
