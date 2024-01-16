@@ -7,7 +7,7 @@ import (
 )
 // Figure out how to open database once for program
 
-func ammo_quantity(identifier int) (int, string) {
+func item_quantity(identifier int) (int, string) {
 	databaseName := "./database.db"
 	database, err := sql.Open("sqlite3", databaseName)
 	

@@ -55,7 +55,7 @@ func add_track() {
 			CallClear()
 			fmt.Println(err)
 		} else {
-			quantity, name = ammo_quantity(bin_id)
+			quantity, name = item_quantity(bin_id)
 			if quantity == -1  { // bin not found
 				CallClear()
 				fmt.Printf("A bin with the id %d was not found\n", bin_id)
@@ -102,7 +102,7 @@ func remove_track() {
 			CallClear()
 			fmt.Println(err)
 		} else {
-			quantity, name = ammo_quantity(bin_id)
+			quantity, name = item_quantity(bin_id)
 			if quantity == -1  { // bin not found
 				CallClear()
 				fmt.Printf("A bin with the id %d was not found\n", bin_id)
@@ -136,5 +136,6 @@ func remove_track() {
 
 
 func admin_track() {
+	
 	fmt.Println("Admining")
 }
