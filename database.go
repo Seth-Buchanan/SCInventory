@@ -7,6 +7,10 @@ import (
 )
 // Figure out how to open database once for program
 
+type sqliteStore struct {
+	storage *sql.DB
+}
+
 func item_quantity(identifier int) (int, string) {
 	databaseName := "./database.db"
 	database, err := sql.Open("sqlite3", databaseName)

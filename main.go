@@ -17,7 +17,7 @@ func start_menu() {
 		CallClear()
 		prompt := promptui.Select{
 			Label: "Choose your option!",
-			Items: []string{"Add Item", "Remove Item", "Edit Params", "Quit"},
+			Items: []string{"Add Item", "Remove Item", "Quit"},
 		}
 		_, result, err := prompt.Run()
 
@@ -31,8 +31,6 @@ func start_menu() {
 			add_track()
 		case "Remove Item":
 			remove_track()
-		case "Edit Params":
-			admin_track()
 		case "Quit":
 			os.Exit(0)
 		}
@@ -135,7 +133,3 @@ func remove_track() {
  }
 
 
-func admin_track() {
-	
-	fmt.Println("Admining")
-}
