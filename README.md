@@ -7,7 +7,37 @@ Nice little inventory system for all your inventory needs.
 Wow! a cool new sleek minimal useful terminal user interface that that adds *and* removes items!
 
 ## None of that administration bloatware!
-Our users know how to use sqlite3 to add and remove items from the table. I'll be adding a way for the program to detect if a database is not present and make a table.
+Our users know how to use sqlite3 to add and remove items from the table the program makes.
+
+### Adding Items
+```SQL
+INSERT INTO 
+ourtable
+(name, quantity, replacement_level) 
+VALUES
+("Lemons",80, 32),
+("Orangutans",120, 83),
+("Bollards",25, 5),
+("Turtles",25, 73),
+("Basketballs",25, 4);
+```
+
+### Listing Items
+```SQL
+SELECT * FROM ourtable;
+```
+```
+1|Lemons|80|32
+2|Orangutans|120|83
+3|Bollards|25|5
+4|Turtles|25|73
+5|Basketballs|25|4
+```
+
+### Removing Items
+```SQL
+DELETE FROM ourtable WHERE id = 1;
+```
 
 # Build steps
 
