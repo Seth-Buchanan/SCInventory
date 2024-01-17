@@ -8,11 +8,14 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func main() {
-	start_menu();
-}
 
-func start_menu() {
+func main() {
+	database, err := openDatabase("database.db")
+	db := NewSQLiteStore(database)
+	err = db.Migrate()
+	if err != nil {
+		log.Fatal(err)
+	}
 	for {
 		CallClear()
 		prompt := promptui.Select{
@@ -28,16 +31,16 @@ func start_menu() {
 		CallClear()
 		switch result {
 		case "Add Item":
-			add_track()
+			add_track(db)
 		case "Remove Item":
-			remove_track()
+			remove_track(db)
 		case "Quit":
 			os.Exit(0)
 		}
 	}
 }
 
-func add_track() {
+func add_track(db *sqliteStore) {
 	var name string
 	var quantity int
 	var bin_id int
@@ -53,7 +56,7 @@ func add_track() {
 			CallClear()
 			fmt.Println(err)
 		} else {
-			quantity, name = item_quantity(bin_id)
+			quantity, name = db.item_quantity(bin_id)
 			if quantity == -1  { // bin not found
 				CallClear()
 				fmt.Printf("A bin with the id %d was not found\n", bin_id)
@@ -76,15 +79,15 @@ func add_track() {
 			fmt.Println(err)
 		} else {
 			CallClear()
-			if yes_no_prompt(fmt.Sprintf("Add %d items to bin %d? (New total %d)", inputNumber, bin_id, quantity-inputNumber)) {
-				add_quantity(bin_id, inputNumber)
+			if yes_no_prompt(fmt.Sprintf("Add %d items to bin %d? (New total %d)", inputNumber, bin_id, quantity+inputNumber)) {
+				db.add_quantity(bin_id, inputNumber)
 			} 
 			return
 		}
 	}
  }
 
-func remove_track() {
+func remove_track(db *sqliteStore) {
 	var name string
 	var quantity int
 	var bin_id int
@@ -100,7 +103,7 @@ func remove_track() {
 			CallClear()
 			fmt.Println(err)
 		} else {
-			quantity, name = item_quantity(bin_id)
+			quantity, name = db.item_quantity(bin_id)
 			if quantity == -1  { // bin not found
 				CallClear()
 				fmt.Printf("A bin with the id %d was not found\n", bin_id)
@@ -124,7 +127,7 @@ func remove_track() {
 		} else {
 			CallClear()
 			if yes_no_prompt(fmt.Sprintf("Remove %d items to bin %d? (New total %d)", inputNumber, bin_id, quantity-inputNumber)) {
-				subtract_quantity(bin_id, inputNumber)
+				db.subtract_quantity(bin_id, inputNumber)
 				// Check if quantity is less than limit
 			} 
 			return

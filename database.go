@@ -4,26 +4,86 @@ import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
+	"errors"
 )
 // Figure out how to open database once for program
 
-type sqliteStore struct {
-	storage *sql.DB
+
+func openDatabase(filename string) (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", filename)
+
+	return db, err
 }
 
-func item_quantity(identifier int) (int, string) {
-	databaseName := "./database.db"
-	database, err := sql.Open("sqlite3", databaseName)
+type sqliteStore struct {
+	db *sql.DB
+}
+
+func NewSQLiteStore(db *sql.DB) *sqliteStore {
+	return &sqliteStore{
+		db: db,
+	}
+}
+
+
+func (r *sqliteStore) Migrate() error {
 	
+	query := `
+    CREATE TABLE IF NOT EXISTS ourtable (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        replacement_level INTEGER
+    );
+    `
+	_, err := r.db.Exec(query)
+	return err
+}
+
+
+func (r *sqliteStore) add_quantity(id int, amount int) error {
+	res, err := r.db.Exec("UPDATE ourtable SET quantity = quantity + ? where id = ?", amount, id)
 	if err != nil {
-		log.Fatalf("ERROR could not access %s database: %v", databaseName, err)
+		return err
 	}
 
-	rows, err := database.Query("SELECT quantity, name FROM ammunition WHERE identifier = ?", identifier)
-	defer rows.Close()
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("Update Failed!")
+	}
+
+	return nil
+}
+
+
+func (r *sqliteStore) subtract_quantity(id int, amount int) error {
+	res, err := r.db.Exec("UPDATE ourtable SET quantity = quantity - ? where id = ?", amount, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("Update Failed!")
+	}
+
+	return nil
+}
+
+func (r *sqliteStore) item_quantity(id int) (int, string) {
+	rows, err := r.db.Query("SELECT quantity, name FROM ourtable WHERE id = ?", id)
 	if err != nil {
 		log.Fatalf("ERROR could not query database %v", err)
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var quantity int
 		var name string
@@ -38,35 +98,3 @@ func item_quantity(identifier int) (int, string) {
 }
 
 
-func add_quantity(identifier int, amount int) {
-	databaseName := "./database.db"
-	database, err := sql.Open("sqlite3", databaseName)
-	
-	if err != nil {
-		log.Fatalf("ERROR could not access %s database: %v", databaseName, err)
-	}
-
-	statement, err := database.Prepare("UPDATE ammunition SET quantity = quantity + ? where identifier = ?", )
-	defer statement.Close()
-	if err != nil {
-		log.Fatal("Unable to prepare statement ", err)
-	}
-	statement.Exec(amount, identifier)
-}
-
-
-func subtract_quantity(identifier int, amount int) {
-	databaseName := "./database.db"
-	database, err := sql.Open("sqlite3", databaseName)
-	
-	if err != nil {
-		log.Fatalf("ERROR could not access %s database: %v", databaseName, err)
-	}
-
-	statement, err := database.Prepare("UPDATE ammunition SET quantity = quantity - ? where identifier = ?", )
-	defer statement.Close()
-	if err != nil {
-		log.Fatal("Unable to prepare statement ", err)
-	}
-	statement.Exec(amount, identifier)
-}
