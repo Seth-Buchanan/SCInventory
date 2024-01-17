@@ -26,7 +26,6 @@ VALUES
 ```SQL
 SELECT * FROM ourtable;
 ```
-output:
 ```
 1|Lemons|80|32
 2|Orangutans|120|83
