@@ -51,7 +51,7 @@ $ go build .
 
 # Usage
 ``` bash 
-./main
+./inventory
 ```
 
 * Select add or remove action
