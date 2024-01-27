@@ -1,5 +1,5 @@
-# leinvetrorie
-Nice little inventory system for all your inventory needs.
+# SCInventory
+A Super Cool Inventory system for all your inventory needs.
 
 ![Start page image](https://github.com/Seth-Buchanan/leinvetrorie/blob/2145383ffb1b569fc1424eb5d06c0bf5e3f664be/start.png?raw=true)
 
